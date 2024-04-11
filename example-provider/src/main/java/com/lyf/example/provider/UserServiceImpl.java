@@ -1,4 +1,4 @@
-package com.lyf.example.consumer;
+package com.lyf.example.provider;
 
 import com.lyf.example.common.model.User;
 import com.lyf.example.common.service.UserService;
