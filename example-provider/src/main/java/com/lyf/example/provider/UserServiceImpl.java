@@ -5,10 +5,8 @@ import com.lyf.example.common.service.UserService;
 
 public class UserServiceImpl implements UserService {
     @Override
-    public User getUser(String userName) {
-        User user = new User();
-        user.setUsername("Evan Li");
-        user.setAge(22);
+    public User getUser(User user) {
+        System.out.println("UserName：" + user.getUsername());
         return user;
     }
 }
