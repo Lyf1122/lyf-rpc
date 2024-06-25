@@ -1,14 +1,11 @@
 package com.lyf.registry;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 一个简单的注册器
  */
-@Slf4j
 public class Registry {
     // 注册信息存储在内存中
     private static final Map<String, Class<?>> map = new ConcurrentHashMap<>(16);

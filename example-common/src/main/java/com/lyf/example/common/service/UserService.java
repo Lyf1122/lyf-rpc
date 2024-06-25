@@ -11,5 +11,5 @@ public interface UserService {
      * @param userName
      * @return
      */
-    User getUser(String userName);
+    User getUser(User user);
 }
