@@ -12,6 +12,16 @@
     <project.version>1.0.0</project.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.36</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
 
   <modules>
     <module>example-common</module>

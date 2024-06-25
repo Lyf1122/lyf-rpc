@@ -32,8 +32,7 @@ public class UserServiceProxy implements UserService {
             return (User) rpcResponse.getData();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException("Failed to process RPC request", e);
         }
-
-        return null;
     }
 }

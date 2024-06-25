@@ -36,8 +36,7 @@ public class ServiceProxy implements InvocationHandler {
             return rpcResponse.getData();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException("Failed to process RPC request", e);
         }
-
-        return null;
     }
 }
