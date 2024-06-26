@@ -23,10 +23,41 @@ graph TD
    服务器 --> 请求处理器 --> 本地服务注册器 --> 服务提供方
 ```
 
-#### example-common
+
+### example-common
 
 服务相关的接口和数据模型，例如：User和UserService
 
+### rpc-core
+
+#### config
+
+**Hutool：**提供了读取和操作配置文件（e.g. application.properties）的功能
+
+```java
+// 创建Properties对象
+Props props = new Props("${applicaiton.properties}");
+
+// 获取配置项的值
+String value = props.getProp("key");
+
+// 将properties映射到配置类
+props.toBean(Class<T>);
+
+```
+
+
+
+### Q&A
+
+1. 为什么要用代理（Proxy）对象？
+
+   Proxy充当了客户端和服务端的中间层，可以进行拦截请求，权限验证等操作。通常代理对象的作用有：
+
+      - 隐藏底层细节
+      - 安全控制
+      - 附加功能
+      - 资源管理
 
 ## 问题记录
 
@@ -36,4 +67,4 @@ graph TD
 
     ```shell
    git config --global http.proxy 127.0.0.1:${port}
-    ```
+   ```

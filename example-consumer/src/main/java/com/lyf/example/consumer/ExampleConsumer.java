@@ -4,7 +4,7 @@ import com.lyf.example.common.model.User;
 import com.lyf.example.common.service.UserService;
 import com.lyf.proxy.ServiceProxyFactory;
 
-public class ConsumerApplication {
+public class ExampleConsumer {
     public static void main(String[] args) {
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
