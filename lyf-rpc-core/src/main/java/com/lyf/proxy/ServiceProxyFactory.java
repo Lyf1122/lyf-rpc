@@ -9,6 +9,7 @@ public class ServiceProxyFactory {
      * @return
      * @param <T>
      */
+
     public static <T> T getProxy(Class<T> interfaceClass)
     {
         return (T) Proxy.newProxyInstance(

@@ -9,18 +9,12 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 
 /**
  * 不同的web服务器对应的请求处理器的实现有所不同
  */
 public class HttpServerHandler implements Handler<HttpServerRequest> {
-
-    private static final Logger logger = LoggerFactory.getLogger(HttpServerHandler.class);
-
     @Override
     public void handle(HttpServerRequest request) {
         // 指定序列化器 已在package com.lyf.serializer下
@@ -48,7 +42,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
             byte[] serialized = serializer.serialize(response);
             httpServerResponse.end(Buffer.buffer(serialized));
         } catch (IOException e) {
-            logger.error("Failed to serialize response", e);
+            e.printStackTrace();
             httpServerResponse.setStatusCode(500).end(Buffer.buffer("{\"error\":\"Internal server error\"}"));
         }
     }
