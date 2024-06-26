@@ -8,8 +8,12 @@ import com.lyf.example.common.model.User;
 public interface UserService {
     /**
      * 根据name获取用户
-     * @param userName
+     * @param user
      * @return
      */
     User getUser(User user);
+
+    default short getNumber() {
+        return 1;
+    }
 }
