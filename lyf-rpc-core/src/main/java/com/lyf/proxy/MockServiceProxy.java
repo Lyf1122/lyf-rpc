@@ -13,7 +13,7 @@ public class MockServiceProxy implements InvocationHandler {
     Class<?> methodReturnType = method.getReturnType();
     log.info("mock invoke {}", method.getName());
 
-    return null;
+    return getDefaultObject(methodReturnType);
   }
 
   private Object getDefaultObject(Class<?> type) {
@@ -33,7 +33,9 @@ public class MockServiceProxy implements InvocationHandler {
         return '\u0000';
      } else if (type == byte.class) {
         return (byte) 0;
-     }
+     } else if (type == short.class) {
+        return (short) 0;
+      }
     }
     // Object type
     return null;

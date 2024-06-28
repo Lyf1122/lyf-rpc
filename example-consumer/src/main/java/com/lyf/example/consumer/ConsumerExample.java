@@ -9,14 +9,13 @@ public class ConsumerExample {
     UserService userService = ServiceProxyFactory.getProxy(UserService.class);
     User user = new User();
     user.setUsername("Evan");
-    user.setAge(23);
     User newUser = userService.getUser(user);
     if (newUser != null) {
-      System.out.println(newUser.getUsername() + ":" + newUser.getAge());
+      System.out.println(newUser.getUsername());
     } else {
       System.out.println("User not found");
     }
-    short num = userService.getNumber();
+    long num = userService.getNumber();
     System.out.println(num);
   }
 }
