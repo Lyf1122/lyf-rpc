@@ -1,0 +1,2 @@
+hessian=com.lyf.serializer.HessianSerializer
+kryo=com.lyf.serializer.KryoSerializer

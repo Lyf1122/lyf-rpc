@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * 基于Java-JDK的序列化 反序列化工具
  */
-public class JDKSerializerImpl implements Serializer{
+public class JDKSerializer implements Serializer{
     @Override
     public <T> byte[] serialize(T object) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

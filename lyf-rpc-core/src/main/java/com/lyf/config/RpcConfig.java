@@ -1,5 +1,7 @@
 package com.lyf.config;
 
+import com.lyf.serializer.Serializer;
+import com.lyf.serializer.SerializerKeys;
 import lombok.Data;
 
 /**
@@ -13,4 +15,6 @@ public class RpcConfig {
   private Integer port = 8080;
   // mock mode
   private boolean mock = false;
+  // serializer type
+  private String serializer = SerializerKeys.JDK;
 }
