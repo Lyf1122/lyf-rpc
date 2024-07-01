@@ -4,7 +4,6 @@ import com.lyf.RpcApplication;
 import com.lyf.model.RpcRequest;
 import com.lyf.model.RpcResponse;
 import com.lyf.registry.Registry;
-import com.lyf.serializer.JDKSerializer;
 import com.lyf.serializer.Serializer;
 import com.lyf.serializer.SerializerFactory;
 import io.vertx.core.Handler;
