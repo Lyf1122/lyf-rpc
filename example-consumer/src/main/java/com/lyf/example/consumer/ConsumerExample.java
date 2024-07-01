@@ -15,7 +15,5 @@ public class ConsumerExample {
     } else {
       System.out.println("User not found");
     }
-    long num = userService.getNumber();
-    System.out.println(num);
   }
 }

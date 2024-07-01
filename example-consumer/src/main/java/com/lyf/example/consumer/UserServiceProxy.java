@@ -6,7 +6,7 @@ import com.lyf.example.common.model.User;
 import com.lyf.example.common.service.UserService;
 import com.lyf.model.RpcRequest;
 import com.lyf.model.RpcResponse;
-import com.lyf.serializer.JDKSerializerImpl;
+import com.lyf.serializer.JDKSerializer;
 import com.lyf.serializer.Serializer;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.io.IOException;
 public class UserServiceProxy implements UserService {
     @Override
     public User getUser(User user) {
-        Serializer serializer = new JDKSerializerImpl();
+        Serializer serializer = new JDKSerializer();
         RpcRequest rpcRequest = RpcRequest.builder()
                 .serviceName(UserService.class.getName())
                 .methodName("getUser")

@@ -1,7 +1,6 @@
 package com.lyf.proxy;
 
 import com.lyf.RpcApplication;
-import com.lyf.utils.ConfigUtils;
 
 import java.lang.reflect.Proxy;
 
