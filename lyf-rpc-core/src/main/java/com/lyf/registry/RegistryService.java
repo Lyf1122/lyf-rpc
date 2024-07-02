@@ -32,4 +32,8 @@ public interface RegistryService {
    * 销毁
    */
   void destroy();
+  /**
+   * 心跳检测
+   */
+  void heartbeat();
 }

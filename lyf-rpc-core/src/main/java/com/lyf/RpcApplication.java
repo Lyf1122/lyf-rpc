@@ -20,6 +20,8 @@ public class RpcApplication {
     RegistryService registryService = RegistryFactory.getInstance(registryConfig.getRegistryType());
     registryService.init(registryConfig);
     log.info("Registry service init, config = {}", registryConfig);
+    // shutdown hook：在JVM关闭前执行的代码，这里执行destroy
+    Runtime.getRuntime().addShutdownHook(new Thread(registryService::destroy));
   }
 
   public static void init() {
