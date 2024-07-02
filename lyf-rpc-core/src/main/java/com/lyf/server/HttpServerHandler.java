@@ -3,7 +3,7 @@ package com.lyf.server;
 import com.lyf.RpcApplication;
 import com.lyf.model.RpcRequest;
 import com.lyf.model.RpcResponse;
-import com.lyf.registry.Registry;
+import com.lyf.registry.LocalRegistry;
 import com.lyf.serializer.Serializer;
 import com.lyf.serializer.SerializerFactory;
 import io.vertx.core.Handler;
@@ -42,7 +42,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
             }
             try {
                 // 尝试调用实现类
-                Class<?> implClass = Registry.getService(rpcRequest.getServiceName());
+                Class<?> implClass = LocalRegistry.getService(rpcRequest.getServiceName());
                 Method method = implClass.getMethod(rpcRequest.getMethodName(), rpcRequest.getParameterTypeList());
                 Object result = method.invoke(implClass.newInstance(), rpcRequest.getArgs());
                 // set response
