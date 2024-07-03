@@ -32,7 +32,7 @@ graph TD
 
 #### Config
 
-**Hutool：**提供了读取和操作配置文件（e.g. application.properties）的功能
+**Hutool**：提供了读取和操作配置文件（e.g. application.properties）的功能
 
 ```java
 // 创建Properties对象
@@ -70,7 +70,28 @@ graph
 	Consumer --处理--> 处理器
 ```
 
+#### Custom Protocol
 
+**为什么需要自定义协议而不是http？**
+
+Http协议只是RPC进行网络传输时的一种可选协议，其本身头部信息和响应格式较重，影响网络传输性能。
+
+Http属于应用层协议，性能慢于TCP这类传输层协议，因此可以基于TCP构建新协议。
+
+**Need to do**：
+
+- 自定义网络传输
+- 自定义消息结构
+
+
+
+**基于TCP的自定义协议：**
+
+```mermaid
+graph LR
+	客户端 --1.请求RpcRequest--> 编码器 --2.请求buffer--> 服务端 --3.解码RpcRequest--> 解码器
+	服务端 --4.响应RpcResponse--> 编码器 --5.响应buffer--> 客户端 --6.解码RpcResponse--> 解码器
+```
 
 
 
