@@ -1,6 +1,7 @@
 package com.lyf.registry;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.cron.CronUtil;
 import cn.hutool.cron.task.Task;
 import cn.hutool.json.JSONUtil;
@@ -9,6 +10,7 @@ import com.lyf.model.ServiceMetaInfo;
 import io.etcd.jetcd.*;
 import io.etcd.jetcd.options.GetOption;
 import io.etcd.jetcd.options.PutOption;
+import io.etcd.jetcd.watch.WatchEvent;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -24,6 +26,8 @@ public class EtcdRegistry implements RegistryService{
   private static final String ETCD_ROOT_PATH = "/rpc/";
   private final Set<String> localRegisterNodeKeySet = new HashSet<>();
   private final RegistryServiceCache registryServiceCache = new RegistryServiceCache();
+  // 正在监听的key
+  private final Set<String> watchKeySet = new ConcurrentHashSet<>();
 
   @Override
   public void init(RegistryConfig registryConfig) {
@@ -77,6 +81,7 @@ public class EtcdRegistry implements RegistryService{
       List<ServiceMetaInfo> serviceMetaInfoList = keyValues.stream().map(keyValue -> {
         String key = keyValue.getKey().toString(StandardCharsets.UTF_8);
         // watch key
+        watch(key);
         String value = keyValue.getValue().toString(StandardCharsets.UTF_8);
         return JSONUtil.toBean(value, ServiceMetaInfo.class);
       }).collect(Collectors.toList());
@@ -136,4 +141,25 @@ public class EtcdRegistry implements RegistryService{
     CronUtil.start();
   }
 
+  @Override
+  public void watch(String serviceNodeKey) {
+    Watch watchClient = client.getWatchClient();
+    // 如果set已存在该key，返回false
+    boolean newWatch = watchKeySet.add(serviceNodeKey);
+    if (newWatch) {
+      watchClient.watch(ByteSequence.from(serviceNodeKey, StandardCharsets.UTF_8), watchResponse -> {
+        for (WatchEvent watchEvent : watchResponse.getEvents()) {
+          switch (watchEvent.getEventType()) {
+            case DELETE:
+              // 清除注册服务缓存
+              registryServiceCache.clearCache();
+              break;
+            case PUT:
+            default:
+              break;
+          }
+        }
+      });
+    }
+  }
 }

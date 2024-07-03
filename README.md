@@ -30,7 +30,7 @@ graph TD
 
 ### rpc-core
 
-#### config
+#### Config
 
 **Hutool：**提供了读取和操作配置文件（e.g. application.properties）的功能
 
@@ -45,6 +45,32 @@ String value = props.getProp("key");
 props.toBean(Class<T>);
 
 ```
+
+
+
+#### Register Center
+
+提供方将服务信息注册在注册中心，消费方从注册中心获取到提供方的信息，然后向提供方发起调用。
+
+需要实现的能力：
+
+- 注册信息数据的存储
+- 服务注册
+- 服务发现
+- Healthy Check
+- 服务注销
+
+
+
+**基于Etcd的实现**
+
+```mermaid
+graph
+	Provider --下线--> Etcd  --通知--> Consumer --监听--> Etcd
+	Consumer --处理--> 处理器
+```
+
+
 
 
 
