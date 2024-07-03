@@ -12,6 +12,7 @@
     <project.version>1.0.0</project.version>
     <jackson.version>2.16.1</jackson.version>
     <slf4j.version>1.7.36</slf4j.version>
+    <etcd.version>0.7.7</etcd.version>
   </properties>
 
   <dependencyManagement>
@@ -30,6 +31,11 @@
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
         <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.etcd</groupId>
+        <artifactId>jetcd-core</artifactId>
+        <version>${etcd.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

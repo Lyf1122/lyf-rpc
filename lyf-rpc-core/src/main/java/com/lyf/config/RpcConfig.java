@@ -1,6 +1,5 @@
 package com.lyf.config;
 
-import com.lyf.serializer.Serializer;
 import com.lyf.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -17,4 +16,6 @@ public class RpcConfig {
   private boolean mock = false;
   // serializer type
   private String serializer = SerializerKeys.JDK;
+  // registry config
+  private RegistryConfig registryConfig = new RegistryConfig();
 }

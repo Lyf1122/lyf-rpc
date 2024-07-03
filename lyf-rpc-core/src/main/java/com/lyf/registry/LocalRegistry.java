@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 一个简单的注册器
  */
-public class Registry {
+public class LocalRegistry {
     // 注册信息存储在内存中
     private static final Map<String, Class<?>> map = new ConcurrentHashMap<>(16);
 

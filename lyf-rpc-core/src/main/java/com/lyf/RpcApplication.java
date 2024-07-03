@@ -1,7 +1,10 @@
 package com.lyf;
 
+import com.lyf.config.RegistryConfig;
 import com.lyf.config.RpcConfig;
 import com.lyf.constant.RpcConstant;
+import com.lyf.registry.RegistryFactory;
+import com.lyf.registry.RegistryService;
 import com.lyf.utils.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,6 +15,13 @@ public class RpcApplication {
   public static void init(RpcConfig newConfig) {
     rpcConfig = newConfig;
     log.info("RpcApplication init, config = {}", newConfig.toString());
+    // init registry
+    RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+    RegistryService registryService = RegistryFactory.getInstance(registryConfig.getRegistryType());
+    registryService.init(registryConfig);
+    log.info("Registry service init, config = {}", registryConfig);
+    // shutdown hook：在JVM关闭前执行的代码，这里执行destroy
+    Runtime.getRuntime().addShutdownHook(new Thread(registryService::destroy));
   }
 
   public static void init() {
