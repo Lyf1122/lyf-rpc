@@ -45,7 +45,7 @@ public enum ProtocolMessageSerializerEnum {
   /**
    * 根据value获取枚举
    */
-  public static ProtocolMessageSerializerEnum getValueByKey(String value) {
+  public static ProtocolMessageSerializerEnum getEnumByValue(String value) {
     if (ObjectUtil.isEmpty(value)) {
       return null;
     }

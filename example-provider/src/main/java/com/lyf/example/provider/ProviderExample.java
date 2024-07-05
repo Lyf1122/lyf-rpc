@@ -8,8 +8,7 @@ import com.lyf.model.ServiceMetaInfo;
 import com.lyf.registry.LocalRegistry;
 import com.lyf.registry.RegistryFactory;
 import com.lyf.registry.RegistryService;
-import com.lyf.server.HttpServer;
-import com.lyf.server.VertxHttpServer;
+import com.lyf.server.tcp.VertxTcpServer;
 
 public class ProviderExample {
   public static void main(String[] args) {
@@ -32,7 +31,7 @@ public class ProviderExample {
       throw new RuntimeException(e);
     }
     // 启动web服务
-    HttpServer httpServer = new VertxHttpServer();
-    httpServer.start(RpcApplication.getConfig().getPort());
+    VertxTcpServer vertxTcpServer = new VertxTcpServer();
+    vertxTcpServer.start(8080);
   }
 }

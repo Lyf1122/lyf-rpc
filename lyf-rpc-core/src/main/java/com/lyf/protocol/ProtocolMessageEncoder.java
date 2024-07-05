@@ -10,13 +10,13 @@ public class ProtocolMessageEncoder {
       return Buffer.buffer();
     }
     ProtocolMessage.Header header = protocolMessage.getHeader();
-    // 向缓冲区写入byte
+    // 向缓冲区写入byte 顺序不能错误 否则编码时字段会错位
     Buffer buffer = Buffer.buffer();
     buffer.appendByte(header.getMagic());
     buffer.appendByte(header.getVersion());
+    buffer.appendByte(header.getSerializer());
     buffer.appendByte(header.getType());
     buffer.appendByte(header.getStatus());
-    buffer.appendByte(header.getSerializer());
     buffer.appendLong(header.getRequestId());
     // get serializer
     ProtocolMessageSerializerEnum serializerEnum = ProtocolMessageSerializerEnum.getEnumByKey(header.getSerializer());

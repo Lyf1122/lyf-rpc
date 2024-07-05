@@ -1,5 +1,8 @@
 package com.lyf.protocol;
 
+import lombok.Getter;
+
+@Getter
 public enum ProtocolMessageTypeEnum {
 
   REQUEST(0),

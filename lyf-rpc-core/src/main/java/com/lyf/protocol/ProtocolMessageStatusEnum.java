@@ -1,5 +1,8 @@
 package com.lyf.protocol;
 
+import lombok.Getter;
+
+@Getter
 public enum ProtocolMessageStatusEnum {
 
   OK("ok", 20),
