@@ -13,11 +13,13 @@ import io.vertx.core.net.NetSocket;
 
 import java.lang.reflect.Method;
 
+/**
+ * 装饰器模式实现 添加 半包粘包 处理器
+ */
 public class TcpServerHandler implements Handler<NetSocket> {
   @Override
   public void handle(NetSocket netSocket) {
-    // 处理连接
-    netSocket.handler(buffer -> {
+    TcpBufferHandlerWrapper bufferHandlerWrapper = new TcpBufferHandlerWrapper(buffer -> {
       // 接受请求并解码
       ProtocolMessage<RpcRequest> protocolMessage;
       try {
@@ -54,5 +56,6 @@ public class TcpServerHandler implements Handler<NetSocket> {
         throw new RuntimeException("协议消息编码错误");
       }
     });
+    netSocket.handler(bufferHandlerWrapper);
   }
 }
