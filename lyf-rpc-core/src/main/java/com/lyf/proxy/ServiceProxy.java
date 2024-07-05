@@ -1,10 +1,7 @@
 package com.lyf.proxy;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
 import com.lyf.RpcApplication;
-import com.lyf.config.RegistryConfig;
 import com.lyf.config.RpcConfig;
 import com.lyf.constant.RpcConstant;
 import com.lyf.model.RpcRequest;
@@ -14,6 +11,7 @@ import com.lyf.registry.RegistryFactory;
 import com.lyf.registry.RegistryService;
 import com.lyf.serializer.Serializer;
 import com.lyf.serializer.SerializerFactory;
+import com.lyf.server.tcp.VertxTcpClient;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -36,34 +34,23 @@ public class ServiceProxy implements InvocationHandler {
                 .parameterTypeList(method.getParameterTypes())
                 .args(args).build();
 
-        try {
-            // 序列化
-            byte[] bodyBytes = serializer.serialize(rpcRequest);
-            // Get provider address from registry
-            RpcConfig rpcConfig = RpcApplication.getConfig();
-            RegistryService registryService = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistryType());
-            ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
-            serviceMetaInfo.setServiceName(serviceName);
-            serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
-            List<ServiceMetaInfo> serviceMetaInfoList = registryService.serviceDiscovery(serviceMetaInfo.getServiceKey());
-            if (CollUtil.isEmpty(serviceMetaInfoList)) {
-                throw new RuntimeException("No server address");
-            }
-            // 暂时取第一个
-            ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
+      // 序列化
+//            byte[] bodyBytes = serializer.serialize(rpcRequest);
+      // Get provider address from registry
+      RpcConfig rpcConfig = RpcApplication.getConfig();
+      RegistryService registryService = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistryType());
+      ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
+      serviceMetaInfo.setServiceName(serviceName);
+      serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
+      List<ServiceMetaInfo> serviceMetaInfoList = registryService.serviceDiscovery(serviceMetaInfo.getServiceKey());
+      if (CollUtil.isEmpty(serviceMetaInfoList)) {
+          throw new RuntimeException("No server address");
+      }
+      // 暂时取第一个
+      ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
+      // TCP
+      RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
+      return rpcResponse.getData();
 
-            byte[] result;
-            try(HttpResponse httpResponse = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
-                    .body(bodyBytes)
-                    .execute()
-            ) {
-                result = httpResponse.bodyBytes();
-            }
-            RpcResponse rpcResponse = serializer.deserialize(result, RpcResponse.class);
-            return rpcResponse.getData();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to process RPC request", e);
-        }
     }
 }

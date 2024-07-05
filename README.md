@@ -14,7 +14,7 @@ RPC是一种用于实现分布式系统中不同服务间通信的技术。它�
 这样，网关可以扮演一个代理角色，将外部请求翻译为RPC调用，然后将返回结果返回给请求方。
 网关还可以处理请求的路由、负载均衡、安全认证等功能，以增强系统的稳定性和安全性。
 
-### 基本架构
+## 基本架构
 
 ```mermaid
 graph TD
@@ -24,15 +24,15 @@ graph TD
 ```
 
 
-### example-common
+## example-common
 
 服务相关的接口和数据模型，例如：User和UserService
 
-### rpc-core
+## rpc-core
 
-#### Config
+### Config
 
-**Hutool：**提供了读取和操作配置文件（e.g. application.properties）的功能
+**Hutool**：提供了读取和操作配置文件（e.g. application.properties）的功能
 
 ```java
 // 创建Properties对象
@@ -48,7 +48,7 @@ props.toBean(Class<T>);
 
 
 
-#### Register Center
+### Register Center
 
 提供方将服务信息注册在注册中心，消费方从注册中心获取到提供方的信息，然后向提供方发起调用。
 
@@ -70,11 +70,52 @@ graph
 	Consumer --处理--> 处理器
 ```
 
+### Custom Protocol
+
+**为什么需要自定义协议而不是http？**
+
+Http协议只是RPC进行网络传输时的一种可选协议，其本身头部信息和响应格式较重，影响网络传输性能。
+
+Http属于应用层协议，性能慢于TCP这类传输层协议，因此可以基于TCP构建新协议。
+
+**Need to do**：
+
+- 自定义网络传输
+- 自定义消息结构
+
+
+
+**基于TCP的自定义协议：**
+
+```mermaid
+graph LR
+	客户端 --1.请求RpcRequest--> 编码器 --2.请求buffer--> 服务端 --3.解码RpcRequest--> 解码器
+	服务端 --4.响应RpcResponse--> 编码器 --5.响应buffer--> 客户端 --6.解码RpcResponse--> 解码器
+```
+
+#### 粘包与半包
+
+- **粘包：**服务端收到的数据比预期多
+
+  解决方案：每次住读取指定长度的数据，超过长度的留到下一次接收消息时再读取
+
+- **半包：**服务端收到的数据比预期少，丢失数据
+
+  解决方案：留到下一次接收消息时再读取
+
+
+
+**基于Vert.x解决半包粘包问题**
+
+`RecordParser`支持保证下次读取到特定长度的字符，可以用来解决该问题。
 
 
 
 
-### Q&A
+
+
+
+## Q&A
 
 1. 为什么要用代理（Proxy）对象？
 
