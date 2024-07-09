@@ -1,0 +1,3 @@
+roundRobin=com.lyf.loadbalancer.RoundRobinLoadBalancer
+random=com.lyf.loadbalancer.RandomLoadBalancer
+hash=com.lyf.loadbalancer.ConsistentHashLoadBalancer

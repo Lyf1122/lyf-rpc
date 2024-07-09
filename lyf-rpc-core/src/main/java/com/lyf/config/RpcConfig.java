@@ -1,5 +1,6 @@
 package com.lyf.config;
 
+import com.lyf.loadbalancer.LoadBalanceKeys;
 import com.lyf.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -18,4 +19,5 @@ public class RpcConfig {
   private String serializer = SerializerKeys.JDK;
   // registry config
   private RegistryConfig registryConfig = new RegistryConfig();
+  private String loadBalancer = LoadBalanceKeys.ROUND_ROBIN;
 }
