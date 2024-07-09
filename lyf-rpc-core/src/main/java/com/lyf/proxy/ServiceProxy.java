@@ -4,6 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import com.lyf.RpcApplication;
 import com.lyf.config.RpcConfig;
 import com.lyf.constant.RpcConstant;
+import com.lyf.loadbalancer.LoadBalanceFactory;
+import com.lyf.loadbalancer.LoadBalancer;
 import com.lyf.model.RpcRequest;
 import com.lyf.model.RpcResponse;
 import com.lyf.model.ServiceMetaInfo;
@@ -16,7 +18,9 @@ import com.lyf.server.tcp.VertxTcpClient;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 基于JDK的动态代理
@@ -35,7 +39,7 @@ public class ServiceProxy implements InvocationHandler {
                 .args(args).build();
 
       // 序列化
-//            byte[] bodyBytes = serializer.serialize(rpcRequest);
+      // byte[] bodyBytes = serializer.serialize(rpcRequest);
       // Get provider address from registry
       RpcConfig rpcConfig = RpcApplication.getConfig();
       RegistryService registryService = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistryType());
@@ -46,8 +50,11 @@ public class ServiceProxy implements InvocationHandler {
       if (CollUtil.isEmpty(serviceMetaInfoList)) {
           throw new RuntimeException("No server address");
       }
-      // 暂时取第一个
-      ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
+      // load balance
+      LoadBalancer loadBalancer = LoadBalanceFactory.getInstance(rpcConfig.getLoadBalancer());
+      Map<String, Object> requestParams = new HashMap<>();
+      requestParams.put("methodName", rpcRequest.getMethodName());
+      ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
       // TCP
       RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
       return rpcResponse.getData();
