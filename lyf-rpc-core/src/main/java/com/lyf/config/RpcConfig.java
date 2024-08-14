@@ -1,5 +1,7 @@
 package com.lyf.config;
 
+import com.lyf.fault.retry.RetryStrategyKeys;
+import com.lyf.fault.tolerant.TolerantStrategyKeys;
 import com.lyf.loadbalancer.LoadBalanceKeys;
 import com.lyf.serializer.SerializerKeys;
 import lombok.Data;
@@ -20,4 +22,8 @@ public class RpcConfig {
   // registry config
   private RegistryConfig registryConfig = new RegistryConfig();
   private String loadBalancer = LoadBalanceKeys.ROUND_ROBIN;
+  // retry
+  private String retryStrategy = RetryStrategyKeys.NO;
+  // tolerant strategy
+  private String tolerantStrategy = TolerantStrategyKeys.SILENT;
 }

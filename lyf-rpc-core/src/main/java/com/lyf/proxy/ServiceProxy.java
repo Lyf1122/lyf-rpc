@@ -4,6 +4,10 @@ import cn.hutool.core.collection.CollUtil;
 import com.lyf.RpcApplication;
 import com.lyf.config.RpcConfig;
 import com.lyf.constant.RpcConstant;
+import com.lyf.fault.retry.RetryFactory;
+import com.lyf.fault.retry.RetryStrategy;
+import com.lyf.fault.tolerant.TolerantStrategy;
+import com.lyf.fault.tolerant.TolerantStrategyFactory;
 import com.lyf.loadbalancer.LoadBalanceFactory;
 import com.lyf.loadbalancer.LoadBalancer;
 import com.lyf.model.RpcRequest;
@@ -15,7 +19,6 @@ import com.lyf.serializer.Serializer;
 import com.lyf.serializer.SerializerFactory;
 import com.lyf.server.tcp.VertxTcpClient;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -39,8 +42,6 @@ public class ServiceProxy implements InvocationHandler {
                 .args(args).build();
 
       // 序列化
-      // byte[] bodyBytes = serializer.serialize(rpcRequest);
-      // Get provider address from registry
       RpcConfig rpcConfig = RpcApplication.getConfig();
       RegistryService registryService = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistryType());
       ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
@@ -55,9 +56,19 @@ public class ServiceProxy implements InvocationHandler {
       Map<String, Object> requestParams = new HashMap<>();
       requestParams.put("methodName", rpcRequest.getMethodName());
       ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
-      // TCP
-      RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
-      return rpcResponse.getData();
+      // rpc & retry
+      RpcResponse rpcResponse;
+      try {
+        RetryStrategy retryStrategy = RetryFactory.getInstance(rpcConfig.getRetryStrategy());
+        rpcResponse = retryStrategy.doRetry(
+            () -> VertxTcpClient.doRequest(rpcRequest, serviceMetaInfo)
+        );
+      } catch (Exception e) {
+        // tolerant
+        TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+        rpcResponse = tolerantStrategy.doTolerant(null, e);
+      }
 
+      return rpcResponse.getData();
     }
 }

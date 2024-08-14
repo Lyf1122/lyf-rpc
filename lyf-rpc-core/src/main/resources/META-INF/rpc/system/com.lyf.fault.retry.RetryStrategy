@@ -1,0 +1,2 @@
+no=com.lyf.fault.retry.NoRetryStrategy
+fixedInterval=com.lyf.fault.retry.FixedIntervalRetryStrategy
