@@ -1,0 +1,2 @@
+failFast=com.lyf.fault.tolerant.FailFastTolerantStrategy
+silent=com.lyf.fault.tolerant.SilentTolerantStrategy
