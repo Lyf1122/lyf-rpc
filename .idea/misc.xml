@@ -6,11 +6,14 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/lyf-rpc-core/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-spring-boot-starter/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-springboot/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/lyf-rpc-easy/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-spring-boot-starter/pom.xml" />
       </set>
     </option>
   </component>

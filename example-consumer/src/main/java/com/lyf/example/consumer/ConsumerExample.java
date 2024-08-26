@@ -1,19 +1,13 @@
 package com.lyf.example.consumer;
 
-import com.lyf.example.common.model.User;
-import com.lyf.example.common.service.UserService;
-import com.lyf.proxy.ServiceProxyFactory;
+import com.lyf.annotation.EnableRpc;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
+@EnableRpc(needServer = false)
 public class ConsumerExample {
   public static void main(String[] args) {
-    UserService userService = ServiceProxyFactory.getProxy(UserService.class);
-    User user = new User();
-    user.setUsername("Evan");
-    User newUser = userService.getUser(user);
-    if (newUser != null) {
-      System.out.println(newUser.getUsername());
-    } else {
-      System.out.println("User not found");
-    }
+    SpringApplication.run(ConsumerExample.class, args);
   }
 }
