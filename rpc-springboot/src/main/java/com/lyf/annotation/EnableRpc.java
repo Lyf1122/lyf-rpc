@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Import({RpcInitBootstrap.class, RpcConsumerBootstrap.class, RpcInitBootstrap.class})
+@Import({RpcInitBootstrap.class, RpcConsumerBootstrap.class})
 public @interface EnableRpc {
   boolean needServer() default true;
 }
