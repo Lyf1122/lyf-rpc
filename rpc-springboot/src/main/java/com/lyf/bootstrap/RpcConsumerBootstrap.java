@@ -8,6 +8,12 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import java.lang.reflect.Field;
 
 public class RpcConsumerBootstrap implements BeanPostProcessor {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class RpcConsumerBootstrap implements BeanPostProcessor {
+  private static final Logger logger = LoggerFactory.getLogger(RpcConsumerBootstrap.class);
+
   @Override
   public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
     Class<?> beanClass = bean.getClass();
@@ -25,11 +31,13 @@ public class RpcConsumerBootstrap implements BeanPostProcessor {
           declaredField.set(bean, proxyObject);
           declaredField.setAccessible(false);
         } catch (IllegalAccessException e) {
-          throw new RuntimeException("为字段注入代理对象失败", e);
+          logger.error("Failed to inject proxy object for field", e);
+          throw new RuntimeException("Failed to inject proxy object for field", e);
         }
       }
     }
 
     return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
   }
+}
 }
