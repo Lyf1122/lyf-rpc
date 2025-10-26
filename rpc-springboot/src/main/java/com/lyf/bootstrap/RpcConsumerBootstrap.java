@@ -2,14 +2,12 @@ package com.lyf.bootstrap;
 
 import com.lyf.annotation.RpcReference;
 import com.lyf.proxy.ServiceProxyFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.lang.reflect.Field;
-
-public class RpcConsumerBootstrap implements BeanPostProcessor {
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RpcConsumerBootstrap implements BeanPostProcessor {
   private static final Logger logger = LoggerFactory.getLogger(RpcConsumerBootstrap.class);
@@ -39,5 +37,4 @@ public class RpcConsumerBootstrap implements BeanPostProcessor {
 
     return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
   }
-}
 }
